@@ -140,22 +140,39 @@ Check the box as you complete each topic.
 ## Phase 7 : Build a Real Project
 
 > Combine everything — database + backend + auth + API design — into one
-> capstone project.
+> capstone project. Read the blueprint first, then run the actual API.
 
 | # | Topic | Notes |
 |---|-------|-------|
-| 1 | Job Board API (capstone blueprint) | [Job-Board-API-Capstone-Blueprint](backend/pratice/Job-Board-API-Capstone-Blueprint.md) |
+| 1 | Job Board API — capstone blueprint (design & plan) | [Job-Board-API-Capstone-Blueprint](backend/pratice/Job-Board-API-Capstone-Blueprint.md) |
+| 2 | Job Board API — runnable practice project (code) | [job-board-api](backend/api-design/job-board-api/README.md) |
 
 ---
 
 ## Phase 8 : DSA — Data Structures & Algorithms
 
 > Start this in parallel with backend phases. One pattern a day keeps
-> rejections away.
+> rejections away. Learn the cheatsheet overview first, then dive into
+> each pattern with detailed notes and problems.
+
+### 8A. Overview
 
 | # | Topic | Notes |
 |---|-------|-------|
 | 1 | Patterns cheatsheet (all common patterns in one place) | [patterns-cheatsheet](dsa/patterns-cheatsheet.md) |
+
+### 8B. Arrays & Strings
+
+| # | Topic | Notes |
+|---|-------|-------|
+| 1 | Two pointers (converging, same-direction, fast-slow) | [Two-Pointers-Notes](dsa/arrays/Two-Pointers-Notes.md) |
+| 2 | Sliding window (fixed & variable size) | [Sliding-Window-Notes](dsa/arrays/Sliding-Window-Notes.md) |
+
+### 8C. Hash Maps & Sets
+
+| # | Topic | Notes |
+|---|-------|-------|
+| 1 | Hash maps (O(1) lookups, frequency counting, grouping) | [Hash-Maps-Notes](dsa/hash-map/Hash-Maps-Notes.md) |
 
 ---
 
@@ -181,7 +198,8 @@ When you have **limited time before an interview**, revise in this priority:
 5. REST API design + Pagination
 6. MongoDB schema design + Aggregation
 7. PostgreSQL EXPLAIN ANALYZE + Isolation levels
-8. DSA patterns cheatsheet
+8. DSA — Two pointers, Sliding window, Hash maps
+9. DSA patterns cheatsheet
 
 ---
 
