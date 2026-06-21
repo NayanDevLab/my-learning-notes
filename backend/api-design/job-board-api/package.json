@@ -1,0 +1,22 @@
+{
+  "name": "job-board-api",
+  "version": "1.0.0",
+  "description": "Phase 1 Capstone — a complete job board API demonstrating auth, RBAC, layered architecture, cursor pagination, file uploads, and background jobs.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node seed.js",
+    "smoke": "node smoke-test.js"
+  },
+  "keywords": ["express", "jwt", "rbac", "rest-api", "capstone"],
+  "author": "Nayan",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.23.8"
+  }
+}
