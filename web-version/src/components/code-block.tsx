@@ -8,6 +8,7 @@ interface CodeBlockProps {
   lang: string;
   label?: string;
   highlighted?: HighlightResult;
+  highlightLines?: number[];
 }
 
 function CopyIcon() {
@@ -27,7 +28,7 @@ function CheckIcon() {
   );
 }
 
-export function CodeBlock({ code, lang, label, highlighted }: CodeBlockProps) {
+export function CodeBlock({ code, lang, label, highlighted, highlightLines = [] }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
   const onCopy = useCallback(() => {
@@ -62,7 +63,7 @@ export function CodeBlock({ code, lang, label, highlighted }: CodeBlockProps) {
       <div className="code-block-scroll">
         <div className="code-block-body">
           {highlighted ? (
-            <HighlightedCode highlighted={highlighted} />
+            <HighlightedCode highlighted={highlighted} highlightLines={highlightLines} />
           ) : (
             <pre style={{ margin: 0, background: "transparent", border: "none", padding: 0 }}>
               <code>{code}</code>
@@ -74,36 +75,41 @@ export function CodeBlock({ code, lang, label, highlighted }: CodeBlockProps) {
   );
 }
 
-function HighlightedCode({ highlighted }: { highlighted: HighlightResult }) {
+function HighlightedCode({
+  highlighted,
+  highlightLines,
+}: {
+  highlighted: HighlightResult;
+  highlightLines: number[];
+}) {
+  const hlSet = new Set(highlightLines);
+
+  function renderLines(lines: typeof highlighted.dark) {
+    return lines.map((line, i) => {
+      const lineNum = i + 1;
+      const isHl = hlSet.has(lineNum);
+      return (
+        <div key={i} className={isHl ? "code-line code-line-hl" : "code-line"}>
+          <span className="code-gutter">{lineNum}</span>
+          <span className="code-content">
+            {line.tokens.map((tok, j) => (
+              <span key={j} style={{ color: tok.color, fontStyle: tok.fontStyle }}>
+                {tok.content}
+              </span>
+            ))}
+          </span>
+        </div>
+      );
+    });
+  }
+
   return (
     <>
       <div className="code-lines" data-theme-target="dark">
-        {highlighted.dark.map((line, i) => (
-          <div key={i} className="code-line">
-            <span className="code-gutter">{i + 1}</span>
-            <span className="code-content">
-              {line.tokens.map((tok, j) => (
-                <span key={j} style={{ color: tok.color, fontStyle: tok.fontStyle }}>
-                  {tok.content}
-                </span>
-              ))}
-            </span>
-          </div>
-        ))}
+        {renderLines(highlighted.dark)}
       </div>
       <div className="code-lines" data-theme-target="light">
-        {highlighted.light.map((line, i) => (
-          <div key={i} className="code-line">
-            <span className="code-gutter">{i + 1}</span>
-            <span className="code-content">
-              {line.tokens.map((tok, j) => (
-                <span key={j} style={{ color: tok.color, fontStyle: tok.fontStyle }}>
-                  {tok.content}
-                </span>
-              ))}
-            </span>
-          </div>
-        ))}
+        {renderLines(highlighted.light)}
       </div>
     </>
   );

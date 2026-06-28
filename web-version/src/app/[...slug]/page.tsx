@@ -4,7 +4,6 @@ import {
   getNoteBySlug,
   getNavTree,
   extractHeadings,
-  buildSearchIndex,
   getPrevNext,
 } from "@/lib/content";
 import { preHighlightCodeBlocks } from "@/lib/process-markdown";
@@ -32,7 +31,6 @@ export default async function NotePage({
 
   const navTree = getNavTree();
   const headings = extractHeadings(note.body);
-  const searchEntries = buildSearchIndex();
   const prevNext = getPrevNext(slug);
 
   const highlightedMap = await preHighlightCodeBlocks(note.body);
@@ -63,7 +61,7 @@ export default async function NotePage({
         overflow: "hidden",
       }}
     >
-      <Header searchEntries={searchEntries} />
+      <Header />
 
       <div
         style={{

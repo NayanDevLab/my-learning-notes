@@ -1,9 +1,8 @@
 import { ThemeToggle } from "./theme-toggle";
 import { SearchDialog } from "./search";
 import { MobileMenuButton } from "./mobile-sidebar";
-import type { SearchEntry } from "@/lib/content";
 
-export function Header({ searchEntries }: { searchEntries: SearchEntry[] }) {
+export function Header() {
   return (
     <header className="site-header">
       {/* Brand */}
@@ -52,7 +51,7 @@ export function Header({ searchEntries }: { searchEntries: SearchEntry[] }) {
       </div>
 
       {/* Search */}
-      <SearchDialog entries={searchEntries} />
+      <SearchDialog />
 
       {/* Theme toggle */}
       <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>

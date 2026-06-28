@@ -3,31 +3,72 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Fuse from "fuse.js";
 import { useRouter } from "next/navigation";
-import type { SearchEntry } from "@/lib/content";
 
-export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
+interface SearchEntry {
+  slug: string;
+  title: string;
+  section: string;
+  snippet: string;
+}
+
+let cachedEntries: SearchEntry[] | null = null;
+let fetchPromise: Promise<SearchEntry[]> | null = null;
+
+function loadIndex(): Promise<SearchEntry[]> {
+  if (cachedEntries) return Promise.resolve(cachedEntries);
+  if (!fetchPromise) {
+    fetchPromise = fetch("/search-index.json")
+      .then((r) => r.json())
+      .then((data: SearchEntry[]) => {
+        cachedEntries = data;
+        return data;
+      });
+  }
+  return fetchPromise;
+}
+
+export function SearchDialog() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [entries, setEntries] = useState<SearchEntry[]>([]);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const router = useRouter();
 
+  useEffect(() => {
+    if (!open) return;
+    if (cachedEntries) {
+      setEntries(cachedEntries);
+      return;
+    }
+    setLoading(true);
+    loadIndex().then((data) => {
+      setEntries(data);
+      setLoading(false);
+    });
+  }, [open]);
+
   const fuse = useMemo(
     () =>
-      new Fuse(entries, {
-        keys: [
-          { name: "title", weight: 2 },
-          { name: "snippet", weight: 1 },
-          { name: "section", weight: 0.5 },
-        ],
-        threshold: 0.35,
-        includeMatches: true,
-      }),
+      entries.length > 0
+        ? new Fuse(entries, {
+            keys: [
+              { name: "title", weight: 2 },
+              { name: "snippet", weight: 1 },
+              { name: "section", weight: 0.5 },
+            ],
+            threshold: 0.35,
+            includeMatches: true,
+          })
+        : null,
     [entries]
   );
 
   const results = useMemo(() => {
+    if (entries.length === 0) return [];
     if (!query.trim()) return entries.slice(0, 8);
+    if (!fuse) return [];
     return fuse.search(query, { limit: 12 }).map((r) => r.item);
   }, [fuse, query, entries]);
 
@@ -82,7 +123,6 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
 
   return (
     <>
-      {/* Trigger button in header */}
       <button
         onClick={() => setOpen(true)}
         className="search-trigger"
@@ -103,7 +143,6 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
         <kbd className="search-kbd">⌘K</kbd>
       </button>
 
-      {/* Modal overlay */}
       {open && (
         <div className="search-overlay" onClick={() => { setOpen(false); setQuery(""); }}>
           <div className="search-modal" onClick={(e) => e.stopPropagation()}>
@@ -132,7 +171,10 @@ export function SearchDialog({ entries }: { entries: SearchEntry[] }) {
               </kbd>
             </div>
             <div className="search-results">
-              {results.length === 0 && query.trim() && (
+              {loading && (
+                <div className="search-empty">Loading index…</div>
+              )}
+              {!loading && results.length === 0 && query.trim() && (
                 <div className="search-empty">No results for &ldquo;{query}&rdquo;</div>
               )}
               {results.map((entry, i) => (

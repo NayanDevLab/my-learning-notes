@@ -1,4 +1,4 @@
-import { getNavTree, buildSearchIndex } from "@/lib/content";
+import { getNavTree, getAllSlugs } from "@/lib/content";
 import type { NavItem } from "@/lib/content";
 import { Header } from "@/components/header";
 import Link from "next/link";
@@ -27,7 +27,7 @@ function firstLeaf(items: NavItem[]): string | null {
 
 export default function Home() {
   const tree = getNavTree();
-  const searchEntries = buildSearchIndex();
+  const totalNotes = getAllSlugs().length;
 
   return (
     <div
@@ -40,7 +40,7 @@ export default function Home() {
         overflow: "hidden",
       }}
     >
-      <Header searchEntries={searchEntries} />
+      <Header />
 
       <main style={{ flex: 1, overflowY: "auto", padding: "0 24px" }}>
         <div
@@ -50,7 +50,6 @@ export default function Home() {
             padding: "64px 0 120px",
           }}
         >
-          {/* Hero */}
           <div style={{ marginBottom: 48 }}>
             <h1
               style={{
@@ -78,15 +77,13 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Section cards */}
           <div className="landing-grid">
             {tree.map((section) => {
               const href = firstLeaf(
                 section.type === "group" ? section.children : [section]
               );
               const count = countLeaves(section);
-              const icon =
-                SECTION_ICONS[section.slug[0]] || "📝";
+              const icon = SECTION_ICONS[section.slug[0]] || "📝";
               const subs =
                 section.type === "group"
                   ? section.children
@@ -116,7 +113,6 @@ export default function Home() {
             })}
           </div>
 
-          {/* Quick stats */}
           <div
             style={{
               marginTop: 48,
@@ -129,9 +125,7 @@ export default function Home() {
             }}
           >
             <span>
-              <strong style={{ color: "var(--text)" }}>
-                {searchEntries.length}
-              </strong>{" "}
+              <strong style={{ color: "var(--text)" }}>{totalNotes}</strong>{" "}
               notes
             </span>
             <span>

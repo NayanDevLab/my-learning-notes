@@ -580,6 +580,10 @@ input::placeholder {
   padding-right: 22px;
   white-space: pre;
 }
+.code-line-hl {
+  background: var(--accent-soft);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
 
 /* ── Callout (matches design callout boxes) ── */
 .callout {

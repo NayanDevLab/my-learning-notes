@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate-search": "npx tsx scripts/generate-search-index.ts",
+    "predev": "npm run generate-search",
     "dev": "next dev",
+    "prebuild": "npm run generate-search",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

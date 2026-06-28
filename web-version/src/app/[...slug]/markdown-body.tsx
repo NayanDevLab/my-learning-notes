@@ -114,6 +114,7 @@ export function MarkdownBody({ content, highlightedBlocks }: MarkdownBodyProps) 
           code={code}
           lang={lang}
           highlighted={block?.highlighted}
+          highlightLines={block?.highlightLines}
         />
       );
     },
