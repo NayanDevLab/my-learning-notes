@@ -4,11 +4,15 @@ import {
   getNoteBySlug,
   getNavTree,
   extractHeadings,
+  buildSearchIndex,
+  getPrevNext,
 } from "@/lib/content";
 import { preHighlightCodeBlocks } from "@/lib/process-markdown";
 import { Header } from "@/components/header";
 import { Sidebar } from "@/components/sidebar";
+import { MobileSidebarOverlay } from "@/components/mobile-sidebar";
 import { TableOfContents } from "@/components/toc";
+import { Pagination } from "@/components/pagination";
 import { MarkdownBody } from "./markdown-body";
 
 export async function generateStaticParams() {
@@ -28,6 +32,8 @@ export default async function NotePage({
 
   const navTree = getNavTree();
   const headings = extractHeadings(note.body);
+  const searchEntries = buildSearchIndex();
+  const prevNext = getPrevNext(slug);
 
   const highlightedMap = await preHighlightCodeBlocks(note.body);
   const highlightedBlocks: Record<
@@ -57,7 +63,7 @@ export default async function NotePage({
         overflow: "hidden",
       }}
     >
-      <Header />
+      <Header searchEntries={searchEntries} />
 
       <div
         style={{
@@ -68,6 +74,7 @@ export default async function NotePage({
         }}
       >
         <Sidebar items={navTree} currentSlug={slug} />
+        <MobileSidebarOverlay items={navTree} currentSlug={slug} />
 
         <main
           data-col="main"
@@ -83,7 +90,7 @@ export default async function NotePage({
             style={{
               maxWidth: 720,
               margin: "0 auto",
-              padding: "54px 0 150px",
+              padding: "54px 0 80px",
             }}
           >
             {breadcrumb.length > 0 && (
@@ -115,6 +122,8 @@ export default async function NotePage({
                 highlightedBlocks={highlightedBlocks}
               />
             </div>
+
+            <Pagination prevNext={prevNext} />
           </article>
         </main>
 

@@ -176,6 +176,92 @@ export function extractHeadings(markdown: string): TocHeading[] {
   return headings;
 }
 
+export interface SearchEntry {
+  slug: string;
+  title: string;
+  section: string;
+  snippet: string;
+}
+
+export function buildSearchIndex(): SearchEntry[] {
+  const entries: SearchEntry[] = [];
+  const tree = getNavTree();
+
+  function walk(items: NavItem[], sectionLabel: string) {
+    for (const item of items) {
+      if (item.type === "leaf") {
+        const filePath = path.join(CONTENT_ROOT, ...item.slug) + ".md";
+        if (!fs.existsSync(filePath)) continue;
+        const raw = fs.readFileSync(filePath, "utf-8");
+        const body = matter(raw).content;
+        const plain = body
+          .replace(/```[\s\S]*?```/g, "")
+          .replace(/^#+\s+/gm, "")
+          .replace(/[*_`~\[\]()>|#-]/g, "")
+          .replace(/\n+/g, " ")
+          .trim();
+        entries.push({
+          slug: "/" + item.slug.join("/"),
+          title: item.title,
+          section: sectionLabel,
+          snippet: plain.slice(0, 200),
+        });
+      } else {
+        walk(item.children, item.title);
+      }
+    }
+  }
+
+  for (const sec of tree) {
+    walk(sec.type === "group" ? sec.children : [sec], sec.title);
+  }
+  return entries;
+}
+
+export interface PrevNext {
+  prev: { slug: string; title: string } | null;
+  next: { slug: string; title: string } | null;
+}
+
+export function getPrevNext(currentSlug: string[]): PrevNext {
+  const all = getAllSlugs();
+  const currentPath = currentSlug.join("/");
+  const idx = all.findIndex((s) => s.join("/") === currentPath);
+  return {
+    prev:
+      idx > 0
+        ? {
+            slug: "/" + all[idx - 1].join("/"),
+            title: getNoteTitle(all[idx - 1]),
+          }
+        : null,
+    next:
+      idx < all.length - 1
+        ? {
+            slug: "/" + all[idx + 1].join("/"),
+            title: getNoteTitle(all[idx + 1]),
+          }
+        : null,
+  };
+}
+
+function getNoteTitle(slug: string[]): string {
+  const tree = getNavTree();
+  function find(items: NavItem[]): string | null {
+    for (const item of items) {
+      if (item.type === "leaf" && item.slug.join("/") === slug.join("/")) {
+        return item.title;
+      }
+      if (item.type === "group") {
+        const found = find(item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+  return find(tree) || slug[slug.length - 1].replace(/-/g, " ");
+}
+
 export function getNoteBySlug(slug: string[]): NoteContent | null {
   const filePath = path.join(CONTENT_ROOT, ...slug) + ".md";
   if (!fs.existsSync(filePath)) return null;

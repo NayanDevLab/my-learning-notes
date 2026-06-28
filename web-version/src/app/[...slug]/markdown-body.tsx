@@ -53,12 +53,22 @@ export function MarkdownBody({ content, highlightedBlocks }: MarkdownBodyProps) 
     h2({ children, ...props }) {
       const text = extractText(children);
       const id = slugify(text);
-      return <h2 id={id} {...props}>{children}</h2>;
+      return (
+        <h2 id={id} {...props} className="heading-anchor">
+          {children}
+          <a href={`#${id}`} className="anchor-link" aria-hidden="true">#</a>
+        </h2>
+      );
     },
     h3({ children, ...props }) {
       const text = extractText(children);
       const id = slugify(text);
-      return <h3 id={id} {...props}>{children}</h3>;
+      return (
+        <h3 id={id} {...props} className="heading-anchor">
+          {children}
+          <a href={`#${id}`} className="anchor-link" aria-hidden="true">#</a>
+        </h3>
+      );
     },
     pre({ children }) {
       const codeEl = React.Children.toArray(children).find(
