@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Fallback tokens for standalone preview; when embedded, the parent's [data-theme] ancestor overrides these so the block tracks the page theme. */
+:root{--code-bg:#1e1f23;--border:#2a2b2f;--text:#e6e6e6;--muted:#9ca3af;--accent:#2dd4bf;--accent-soft:rgba(45,212,191,.13);--hover-bg:rgba(255,255,255,.05);--hl-kw:#c99bd6;--hl-str:#9fcb9f;--hl-num:#e0a979;--hl-com:#7e8595;--hl-fn:#7ab6e6;--hl-type:#e3c58a;--hl-tag:#e58a92;--hl-attr:#d9a978;--hl-op:#9aa6ac;--hl-bool:#63bac2;--hl-punc:#aab0b8}
+[data-theme="light"]{--code-bg:#f5f5f2;--border:#e5e5e0;--text:#2a2a2a;--muted:#6b7280;--accent:#0d9488;--accent-soft:rgba(13,148,136,.10);--hover-bg:rgba(0,0,0,.045);--hl-kw:#9333a8;--hl-str:#3f7e3a;--hl-num:#9a6212;--hl-com:#838991;--hl-fn:#2f6bd4;--hl-type:#8a5a12;--hl-tag:#b5443a;--hl-attr:#9a6212;--hl-op:#5b636b;--hl-bool:#0a7384;--hl-punc:#5c626a}
+.cbscroll::-webkit-scrollbar{height:9px}
+.cbscroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+</style>
+</helmet>
+<div style="background:var(--code-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:'Inter',system-ui,-apple-system,sans-serif">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 11px 9px 15px;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:9px;min-width:0">
+      <span style="width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;opacity:.85"></span>
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ label }}</span>
+      <span style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);opacity:.65;flex:none">{{ lang }}</span>
+    </div>
+    <button onClick="{{ onCopy }}" aria-label="Copy code" style="display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--border);border-radius:7px;background:transparent;color:var(--muted);font-family:inherit;font-size:12px;font-weight:500;cursor:pointer;flex:none;transition:background-color .15s ease,color .15s ease" style-hover="background:var(--hover-bg);color:var(--text)">
+      <sc-if value="{{ copied }}" hint-placeholder-val="{{ false }}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:var(--accent)"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </sc-if>
+      <sc-if value="{{ notCopied }}" hint-placeholder-val="{{ true }}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.7"></rect><path d="M15.5 8.5V6.5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+      </sc-if>
+      <span>{{ copyLabel }}</span>
+    </button>
+  </div>
+  <div class="cbscroll" style="overflow-x:auto">
+    <div style="min-width:max-content;padding:13px 0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;line-height:1.6;color:var(--text)">
+      <sc-for list="{{ lines }}" as="ln" hint-placeholder-count="8">
+        <div style="{{ ln.rowStyle }}"><sc-if value="{{ showLn }}" hint-placeholder-val="{{ true }}"><span style="{{ ln.gutterStyle }}">{{ ln.num }}</span></sc-if><span style="{{ ln.codeStyle }}"><sc-for list="{{ ln.tokens }}" as="tk"><span style="{{ tk.style }}">{{ tk.text }}</span></sc-for></span></div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 720, &quot;height&quot;: 320},
+  &quot;label&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;withRetry.ts&quot;,&quot;tsType&quot;:&quot;string&quot;},
+  &quot;lang&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;typescript&quot;,&quot;tsType&quot;:&quot;string&quot;},
+  &quot;code&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;async function withRetry&lt;T&gt;(task: () =&gt; Promise&lt;T&gt;): Promise&lt;T&gt; {\n  let lastError: unknown;\n  for (let i = 0; i &lt; 3; i++) {\n    try {\n      return await task();\n    } catch (err) {\n      lastError = err;\n    }\n  }\n  throw lastError;\n}&quot;,&quot;tsType&quot;:&quot;string&quot;},
+  &quot;highlight&quot;: {&quot;editor&quot;:null,&quot;default&quot;:[5],&quot;tsType&quot;:&quot;number[]&quot;},
+  &quot;showLineNumbers&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = { copied:false };
+    this.KW = new Set(['const','let','var','function','return','if','else','for','while','do','switch','case','break','continue','async','await','import','export','from','default','new','class','extends','implements','interface','type','enum','namespace','public','private','protected','readonly','static','abstract','get','set','typeof','instanceof','keyof','in','of','as','yield','throw','try','catch','finally','delete','void']);
+    this.TW = new Set(['string','number','boolean','void','any','unknown','never','object','symbol','bigint']);
+    this.CO = new Set(['true','false','null','undefined','this','super','NaN','Infinity']);
+    this.STY = {
+      kw:{color:'var(--hl-kw)'}, str:{color:'var(--hl-str)'}, num:{color:'var(--hl-num)'},
+      com:{color:'var(--hl-com)',fontStyle:'italic'}, fn:{color:'var(--hl-fn)'}, type:{color:'var(--hl-type)'},
+      tag:{color:'var(--hl-tag)'}, attr:{color:'var(--hl-attr)'}, op:{color:'var(--hl-op)'},
+      bool:{color:'var(--hl-bool)'}, punc:{color:'var(--hl-punc)'}, var:{color:'var(--text)'}, ws:{}
+    };
+  }
+  componentWillUnmount(){ clearTimeout(this._t); }
+  copy(){
+    const text = this.props.code != null ? String(this.props.code) : '';
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); }
+      else { const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    }catch(e){}
+    this.setState({ copied:true });
+    clearTimeout(this._t); this._t = setTimeout(()=>this.setState({ copied:false }), 1500);
+  }
+  tokenizeLine(line, st){
+    const out=[]; const KW=this.KW, TW=this.TW, CO=this.CO;
+    const RE=/(\/\/.*)|(`(?:\\.|[^`\\])*`|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|(\d[\d_]*(?:\.\d+)?)|([A-Za-z_$][\w$]*)|(\s+)|([\s\S])/g;
+    const sp=(type,ch)=>{ st.prevType=type; if(ch!==undefined) st.prevCh=ch; };
+    let m;
+    while((m=RE.exec(line))!==null){
+      if(m.index===RE.lastIndex) RE.lastIndex++;
+      if(m[1]!=null){ out.push({t:m[1],c:'com'}); sp('com'); }
+      else if(m[2]!=null){ out.push({t:m[2],c:'str'}); sp('str'); }
+      else if(m[3]!=null){ out.push({t:m[3],c:'num'}); sp('num'); }
+      else if(m[4]!=null){
+        const w=m[4]; const nx=line[RE.lastIndex]||''; let c;
+        if(st.expectTag){ st.expectTag=false; st.inTag=true; c='tag'; }
+        else if(KW.has(w)) c='kw';
+        else if(CO.has(w)) c='bool';
+        else if(st.inTag && nx==='=') c='attr';
+        else if(TW.has(w)) c='type';
+        else if(nx==='(') c='fn';
+        else if(/^[A-Z]/.test(w)) c='type';
+        else c='var';
+        out.push({t:w,c});
+        sp((c==='kw'||c==='var'||c==='type'||c==='fn'||c==='bool'||c==='attr'||c==='tag')?'word':c);
+      }
+      else if(m[5]!=null){ out.push({t:m[5],c:'ws'}); }
+      else {
+        const ch=m[6];
+        const identLike=(st.prevType==='word'||st.prevType==='num'||st.prevCh===')'||st.prevCh===']');
+        if(ch==='/' && st.expectTag){ out.push({t:ch,c:'tag'}); sp('punct',ch); }
+        else if(ch==='<'){ const nx=line[RE.lastIndex]||''; if(/[A-Za-z\/]/.test(nx) && !identLike){ st.expectTag=true; out.push({t:ch,c:'tag'}); } else { out.push({t:ch,c:'op'}); } sp('punct','<'); }
+        else if(ch==='>'){ if(st.inTag && !st.exprDepth){ st.inTag=false; out.push({t:ch,c:'tag'}); } else { out.push({t:ch,c:'op'}); } sp('punct','>'); }
+        else if(ch==='{'){ if(st.inTag) st.exprDepth=(st.exprDepth||0)+1; out.push({t:ch,c:'punc'}); sp('punct','{'); }
+        else if(ch==='}'){ if(st.inTag && st.exprDepth>0) st.exprDepth--; out.push({t:ch,c:'punc'}); sp('punct','}'); }
+        else if('+-*/%=!&|?^~'.indexOf(ch)>=0){ out.push({t:ch,c:'op'}); sp('punct',ch); }
+        else { out.push({t:ch,c:'punc'}); sp('punct',ch); }
+      }
+    }
+    if(out.length===0) out.push({t:'\u00A0',c:'ws'});
+    return out;
+  }
+  renderVals(){
+    const raw=(this.props.code!=null?String(this.props.code):'').replace(/^\n/,'').replace(/\n\s*$/,'');
+    const hl=new Set(this.props.highlight||[]);
+    const showLn=this.props.showLineNumbers!==false;
+    const st={inTag:false,expectTag:false,exprDepth:0,prevType:null,prevCh:null};
+    const lines=raw.split('\n').map((line,idx)=>{
+      const tokens=this.tokenizeLine(line,st).map(tk=>({ text:tk.t, style:this.STY[tk.c]||this.STY.var }));
+      const on=hl.has(idx+1);
+      return {
+        num:idx+1, tokens,
+        rowStyle: on
+          ? {display:'flex',alignItems:'stretch',background:'var(--accent-soft)',boxShadow:'inset 2px 0 0 var(--accent)'}
+          : {display:'flex',alignItems:'stretch'},
+        gutterStyle:{flex:'none',minWidth:'30px',paddingLeft:'16px',paddingRight:'14px',textAlign:'right',color:'var(--muted)',opacity:.5,userSelect:'none',borderRight:'1px solid var(--border)',fontVariantNumeric:'tabular-nums'},
+        codeStyle:{flex:'1 1 auto',paddingLeft:'18px',paddingRight:'22px',whiteSpace:'pre'},
+      };
+    });
+    return {
+      label:this.props.label||'snippet',
+      lang:this.props.lang||'',
+      lines, showLn,
+      onCopy:()=>this.copy(),
+      copied:!!this.state.copied,
+      notCopied:!this.state.copied,
+      copyLabel:this.state.copied?'Copied':'Copy',
+    };
+  }
+}
+</script>
+</body>
+</html>

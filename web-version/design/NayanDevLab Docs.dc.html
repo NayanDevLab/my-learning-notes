@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--page-bg)}
+:root{--page-bg:#16171a;--sidebar-bg:#1a1b1e;--code-bg:#1e1f23;--text:#e6e6e6;--muted:#9ca3af;--border:#2a2b2f;--accent:#2dd4bf;--accent-soft:rgba(45,212,191,.13);--hover-bg:rgba(255,255,255,.05);--nav-fg:#bfc1c6;--code-str:#85cdb6;--code-kw:#7dd3c8;--hl-kw:#c99bd6;--hl-str:#9fcb9f;--hl-num:#e0a979;--hl-com:#7e8595;--hl-fn:#7ab6e6;--hl-type:#e3c58a;--hl-tag:#e58a92;--hl-attr:#d9a978;--hl-op:#9aa6ac;--hl-bool:#63bac2;--hl-punc:#aab0b8;--read-size:17px}
+[data-theme="light"]{--page-bg:#fafaf8;--sidebar-bg:#f4f4f1;--code-bg:#f5f5f2;--text:#2a2a2a;--muted:#6b7280;--border:#e5e5e0;--accent:#0d9488;--accent-soft:rgba(13,148,136,.10);--hover-bg:rgba(0,0,0,.045);--nav-fg:#4a4a45;--code-str:#0f766e;--code-kw:#0f766e;--hl-kw:#9333a8;--hl-str:#3f7e3a;--hl-num:#9a6212;--hl-com:#838991;--hl-fn:#2f6bd4;--hl-type:#8a5a12;--hl-tag:#b5443a;--hl-attr:#9a6212;--hl-op:#5b636b;--hl-bool:#0a7384;--hl-punc:#5c626a}
+:root{--cal-tip:#6aa5e0;--cal-tip-bg:rgba(106,165,224,.10);--cal-warn:#d9a55a;--cal-warn-bg:rgba(217,165,90,.12);--cal-ok:#6cc28a;--cal-ok-bg:rgba(108,194,138,.10);--cal-goal:#b693dd;--cal-goal-bg:rgba(182,147,221,.12);--cal-note:#3fd0c0;--cal-note-bg:rgba(45,212,191,.10);--cal-bonus:#e8916b;--cal-bonus-bg:rgba(232,145,107,.12);--fc-yellow:#d8c46a;--fc-yellow-bg:rgba(216,196,106,.14);--fc-line:#727885}
+[data-theme="light"]{--cal-tip:#2f6bd4;--cal-tip-bg:rgba(47,107,212,.07);--cal-warn:#b5792a;--cal-warn-bg:rgba(181,121,42,.10);--cal-ok:#3f8a52;--cal-ok-bg:rgba(63,138,82,.08);--cal-goal:#8a5cc4;--cal-goal-bg:rgba(138,92,196,.09);--cal-note:#0d9488;--cal-note-bg:rgba(13,148,136,.07);--cal-bonus:#c2603a;--cal-bonus-bg:rgba(194,96,58,.08);--fc-yellow:#9a7d18;--fc-yellow-bg:rgba(154,125,24,.12);--fc-line:#a8aca4}
+/* Theme tokens switch instantly: transitioning a property whose value is a var() token that changes on an ancestor freezes mid-interpolation in some engines. Only non-token transitions (hover bg on transparent elements, chevron transform) are animated. */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px;border:3px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+::selection{background:var(--accent);color:var(--page-bg)}
+input::placeholder{color:var(--muted);opacity:1}
+@media (max-width:1180px){[data-col="toc"]{display:none}}
+@media (max-width:1180px){[data-col="main"]{padding-left:44px!important;padding-right:44px!important}}
+@media (max-width:820px){[data-col="sidebar"]{display:none}}
+@media (max-width:820px){[data-col="main"]{padding-left:26px!important;padding-right:26px!important}}
+</style>
+</helmet>
+<div data-screen-label="NayanDevLab Docs" data-theme="{{ theme }}" style="--read-size:{{ readSize }}px;height:100vh;display:flex;flex-direction:column;background:var(--page-bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;overflow:hidden">
+
+  <header style="display:grid;grid-template-columns:1fr minmax(0,460px) 1fr;align-items:center;gap:24px;height:60px;padding:0 22px;background:var(--sidebar-bg);border-bottom:1px solid var(--border);flex:none">
+    <div style="display:flex;align-items:center;gap:11px;min-width:0">
+      <div style="width:30px;height:30px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#0a1f1c;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:15px;flex:none">N</div>
+      <span style="font-weight:700;font-size:15.5px;letter-spacing:-0.01em;color:var(--text);white-space:nowrap">NayanDevLab</span>
+    </div>
+    <label style="display:flex;align-items:center;gap:9px;height:38px;padding:0 12px;border-radius:10px;background:var(--code-bg);border:1px solid var(--border);min-width:0">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:none;color:var(--muted)"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+      <input placeholder="Search notes…" style="flex:1;min-width:0;border:none;background:transparent;outline:none;color:var(--text);font-family:inherit;font-size:14px">
+      <kbd style="font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);background:var(--page-bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px;line-height:1;flex:none">⌘K</kbd>
+    </label>
+    <div style="display:flex;justify-content:flex-end;align-items:center">
+      <button onClick="{{ toggleTheme }}" title="Toggle theme" aria-label="Toggle theme" style="width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;transition:background-color .15s ease" style-hover="background:var(--hover-bg)">
+        <sc-if value="{{ isDark }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"></circle><line x1="12" y1="1.5" x2="12" y2="3.5"></line><line x1="12" y1="20.5" x2="12" y2="22.5"></line><line x1="4" y1="4" x2="5.5" y2="5.5"></line><line x1="18.5" y1="18.5" x2="20" y2="20"></line><line x1="1.5" y1="12" x2="3.5" y2="12"></line><line x1="20.5" y1="12" x2="22.5" y2="12"></line><line x1="4" y1="20" x2="5.5" y2="18.5"></line><line x1="18.5" y1="5.5" x2="20" y2="4"></line></svg>
+        </sc-if>
+        <sc-if value="{{ isLight }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </sc-if>
+      </button>
+    </div>
+  </header>
+
+  <div style="flex:1;display:flex;overflow:hidden;min-height:0">
+
+    <nav data-col="sidebar" style="width:280px;flex:none;background:var(--sidebar-bg);border-right:1px solid var(--border);overflow-y:auto;padding:20px 12px 48px">
+      <sc-for list="{{ nav }}" as="sec" hint-placeholder-count="4">
+        <div style="margin-bottom:3px">
+          <button onClick="{{ sec.onToggle }}" style="width:100%;display:flex;align-items:center;gap:8px;padding:7px 9px;border:none;background:transparent;color:var(--text);font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:-0.006em;cursor:pointer;border-radius:8px;text-align:left;transition:background-color .15s ease" style-hover="background:var(--hover-bg)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:none;color:var(--muted);transition:transform .18s ease;transform:rotate({{ sec.rotDeg }}deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span style="flex:1">{{ sec.label }}</span>
+          </button>
+          <sc-if value="{{ sec.isOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="margin:1px 0 6px">
+              <sc-for list="{{ sec.children }}" as="sub">
+                <div>
+                  <button onClick="{{ sub.onToggle }}" style="width:100%;display:flex;align-items:center;gap:8px;padding:6px 9px 6px 22px;border:none;background:transparent;color:var(--nav-fg);font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;border-radius:8px;text-align:left;transition:background-color .15s ease" style-hover="background:var(--hover-bg)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="flex:none;color:var(--muted);opacity:.8;transition:transform .18s ease;transform:rotate({{ sub.rotDeg }}deg)"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    <span style="flex:1">{{ sub.label }}</span>
+                  </button>
+                  <sc-if value="{{ sub.isOpen }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;flex-direction:column;gap:1px;padding-left:35px;margin:1px 0 5px">
+                      <sc-for list="{{ sub.leaves }}" as="leaf">
+                        <a onClick="{{ leaf.onClick }}" role="button" style="{{ leaf.style }}" style-hover="{{ leaf.hoverStyle }}">{{ leaf.label }}</a>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </nav>
+
+    <main ref="{{ contentRef }}" data-col="main" style="flex:1;min-width:0;overflow-y:auto;scroll-behavior:smooth;padding:0 56px">
+      <article style="max-width:720px;margin:0 auto;padding:54px 0 150px">
+
+        <div style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);margin:0 0 18px;font-weight:500">DSA <span style="opacity:.6">/</span> Arrays</div>
+
+        <h1 style="margin:0 0 18px;font-size:38px;line-height:1.16;font-weight:700;letter-spacing:-0.022em;color:var(--text);text-wrap:pretty"><span style="margin-right:.42em">🔀</span>Merge Sorted Array</h1>
+        <p style="margin:0;font-size:calc(var(--read-size,17px) + 1.5px);line-height:1.62;color:var(--text);font-weight:400;text-wrap:pretty"><strong style="font-weight:600;color:var(--text)">Merge Sorted Array</strong> (LeetCode 88) asks you to merge two sorted integer arrays, <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> and <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums2</code>, into one sorted array — <em style="font-style:italic">in place</em>, reusing the spare capacity already at the end of <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code>. It is the classic warm-up for the <a onClick="{{ noop }}" role="link" tabindex="0" style="color:var(--accent);text-decoration-line:none;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px;cursor:pointer" style-hover="text-decoration-line:underline">two-pointer technique</a>.</p>
+
+        <div role="separator" style="height:1px;border:none;margin:34px 0 36px;background:linear-gradient(90deg,transparent,var(--border) 14%,var(--border) 86%,transparent)"></div>
+
+        <h2 id="problem" style="margin:0 0 16px;font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-0.018em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">🤔</span>Understanding the problem</h2>
+        <p style="margin:0 0 22px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">The tricky part is <em style="font-style:italic">not</em> the sorting — both inputs arrive <strong style="font-weight:600;color:var(--text)">already sorted</strong>. It is doing the merge <strong style="font-weight:600;color:var(--text)">without a second buffer</strong>. A few details decide the whole approach:</p>
+        <ul style="margin:0 0 24px;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px">
+          <li style="display:flex;gap:13px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.5;margin-top:11px"></span>
+            <span style="flex:1;text-wrap:pretty"><code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> has length <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">m + n</code>; its last <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">n</code> slots are zeros — scratch space, not real values.</span>
+          </li>
+          <li style="display:flex;gap:13px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.5;margin-top:11px"></span>
+            <span style="flex:1;text-wrap:pretty">The result must stay sorted, and we must not overwrite a value in <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> before we have read it:
+              <ul style="margin:11px 0 1px;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px">
+                <li style="display:flex;gap:12px;line-height:1.7;color:var(--muted)">
+                  <span style="flex:none;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;opacity:.7;margin-top:10px"></span>
+                  <span style="flex:1;text-wrap:pretty">Writing <strong style="font-weight:600;color:var(--text)">front-to-back</strong> clobbers unread elements.</span>
+                </li>
+                <li style="display:flex;gap:12px;line-height:1.7;color:var(--muted)">
+                  <span style="flex:none;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;opacity:.7;margin-top:10px"></span>
+                  <span style="flex:1;text-wrap:pretty">Writing <strong style="font-weight:600;color:var(--text)">back-to-front</strong> never does — that is the key insight.</span>
+                </li>
+              </ul>
+            </span>
+          </li>
+          <li style="display:flex;gap:13px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.5;margin-top:11px"></span>
+            <span style="flex:1;text-wrap:pretty">Return nothing; the mutation happens <em style="font-style:italic">inside</em> <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code>.</span>
+          </li>
+        </ul>
+
+        <div style="display:flex;gap:13px;margin:8px 0 12px;padding:14px 17px;border-left:3px solid var(--cal-tip);border-radius:10px;background:var(--cal-tip-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">💡</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-tip);margin:2px 0 5px">Tip</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">When an array hands you trailing scratch space, read it as a hint to <strong style="font-weight:600">fill from the back</strong>. Spotting that spare capacity is half of solving the problem.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:13px;margin:0 0 8px;padding:14px 17px;border-left:3px solid var(--cal-goal);border-radius:10px;background:var(--cal-goal-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">🎯</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-goal);margin:2px 0 5px">Key point</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">Hold one invariant: the write index <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.85em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 6px;font-weight:500">k</code> never moves past a value you haven't read yet. Keep that true and correctness follows for free.</p>
+          </div>
+        </div>
+
+        <h2 id="approach" style="margin:52px 0 16px;font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-0.018em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">✅</span>The two-pointer approach</h2>
+        <p style="margin:0 0 22px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Walk <strong style="font-weight:600;color:var(--text)">both arrays from the end</strong> and fill <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> from its last index backward. At each step, copy whichever tail value is larger:</p>
+        <ol style="margin:0 0 24px;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px">
+          <li style="display:flex;gap:14px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;min-width:20px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums">1.</span>
+            <span style="flex:1;text-wrap:pretty">Set <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">i = m - 1</code>, <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">j = n - 1</code>, and a write pointer <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">k = m + n - 1</code>.</span>
+          </li>
+          <li style="display:flex;gap:14px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;min-width:20px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums">2.</span>
+            <span style="flex:1;text-wrap:pretty">Compare <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1[i]</code> with <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums2[j]</code>; place the larger at <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1[k]</code> and step that pointer back.
+              <ul style="margin:11px 0 1px;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px">
+                <li style="display:flex;gap:12px;line-height:1.7;color:var(--muted)">
+                  <span style="flex:none;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;opacity:.7;margin-top:10px"></span>
+                  <span style="flex:1;text-wrap:pretty">If <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> runs out first, keep draining <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums2</code>.</span>
+                </li>
+              </ul>
+            </span>
+          </li>
+          <li style="display:flex;gap:14px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;min-width:20px;color:var(--accent);font-weight:600;font-variant-numeric:tabular-nums">3.</span>
+            <span style="flex:1;text-wrap:pretty">Stop once <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums2</code> is fully merged — any remaining <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> values are already in place.</span>
+          </li>
+        </ol>
+
+        <div style="display:flex;gap:13px;margin:0 0 22px;padding:14px 17px;border-left:3px solid var(--cal-warn);border-radius:10px;background:var(--cal-warn-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">⚠️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-warn);margin:2px 0 5px">Gotcha</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">Don't merge front-to-back. Writing from index <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.85em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 6px;font-weight:500">0</code> overwrites <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.85em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:1px 6px;font-weight:500">nums1</code> values you haven't compared yet — the classic wrong turn on this problem.</p>
+          </div>
+        </div>
+
+        <figure data-om-raster style="margin:0 0 24px;padding:22px 16px 14px;border:1px solid var(--border);border-radius:14px;background:var(--code-bg)">
+          <svg viewBox="0 0 600 450" width="100%" style="max-width:560px;height:auto;display:block;margin:0 auto;font-family:'Inter',system-ui,sans-serif">
+            <defs><marker id="fcArrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--fc-line)"></path></marker></defs>
+            <g stroke="var(--fc-line)" stroke-width="1.5" fill="none">
+              <line x1="300" y1="68" x2="300" y2="90" marker-end="url(#fcArrow)"></line>
+              <line x1="372" y1="134" x2="446" y2="134" marker-end="url(#fcArrow)"></line>
+              <line x1="300" y1="176" x2="300" y2="196" marker-end="url(#fcArrow)"></line>
+              <line x1="300" y1="244" x2="300" y2="264" marker-end="url(#fcArrow)"></line>
+              <line x1="194" y1="316" x2="156" y2="316" marker-end="url(#fcArrow)"></line>
+              <line x1="406" y1="316" x2="444" y2="316" marker-end="url(#fcArrow)"></line>
+              <polyline points="88,338 88,410 512,410 512,338"></polyline>
+              <polyline points="300,410 12,410 12,134 224,134" stroke-dasharray="5 6" marker-end="url(#fcArrow)"></polyline>
+            </g>
+            <circle cx="300" cy="410" r="2.5" fill="var(--fc-line)"></circle>
+            <rect x="180" y="22" width="240" height="46" rx="23" fill="var(--cal-tip-bg)" stroke="var(--cal-tip)" stroke-width="1.5"></rect>
+            <text x="300" y="46" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="13" font-weight="500">Start · set i, j, k at the ends</text>
+            <polygon points="300,92 372,134 300,176 228,134" fill="var(--code-bg)" stroke="var(--border)" stroke-width="1.5"></polygon>
+            <text x="300" y="135" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="13" font-weight="600">j ≥ 0 ?</text>
+            <rect x="448" y="111" width="134" height="46" rx="23" fill="var(--fc-yellow-bg)" stroke="var(--fc-yellow)" stroke-width="1.5"></rect>
+            <text x="515" y="135" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="13" font-weight="500">Done ✓</text>
+            <text x="410" y="125" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">No</text>
+            <text x="312" y="189" text-anchor="start" fill="var(--muted)" font-size="11" font-style="italic">Yes</text>
+            <rect x="206" y="198" width="188" height="46" rx="11" fill="var(--code-bg)" stroke="var(--border)" stroke-width="1.5"></rect>
+            <text x="300" y="222" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="12">compare nums1[i] vs nums2[j]</text>
+            <polygon points="300,266 406,316 300,366 194,316" fill="var(--code-bg)" stroke="var(--border)" stroke-width="1.5"></polygon>
+            <text x="300" y="316" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="12" font-weight="600">nums1[i] &gt; nums2[j] ?</text>
+            <text x="166" y="306" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">Yes</text>
+            <rect x="24" y="294" width="132" height="44" rx="11" fill="var(--cal-ok-bg)" stroke="var(--cal-ok)" stroke-width="1.5"></rect>
+            <text x="90" y="316" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="12">copy nums1[i]</text>
+            <text x="434" y="306" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">No</text>
+            <rect x="444" y="294" width="132" height="44" rx="11" fill="var(--cal-tip-bg)" stroke="var(--cal-tip)" stroke-width="1.5"></rect>
+            <text x="510" y="316" text-anchor="middle" dominant-baseline="central" fill="var(--text)" font-size="12">copy nums2[j]</text>
+            <text x="300" y="430" text-anchor="middle" fill="var(--muted)" font-size="11" font-style="italic">↻ then k-- and repeat until j &lt; 0</text>
+          </svg>
+          <figcaption style="margin:12px 0 0;text-align:center;font-size:12px;color:var(--muted);line-height:1.5">Control flow of <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:var(--text)">merge()</span> — each pass writes the larger tail, then loops.</figcaption>
+        </figure>
+
+        <dc-import name="CodeBlock" label="merge.js" lang="javascript" code="{{ mergeCode }}" highlight="{{ mergeHl }}" hint-size="100%,300px" style="display:block;margin:8px 0 24px"></dc-import>
+
+        <p style="margin:0 0 22px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Because we only ever <em style="font-style:italic">write</em> to slots at or beyond <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">k</code>, and <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">k</code> always stays ahead of both read pointers, we never overwrite a value we still need.</p>
+
+        <p style="margin:0 0 16px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Trace it on a tiny example — <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1 = [1,2,3,0,0,0]</code>, <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums2 = [2,5,6]</code> — to lock in the invariant:</p>
+
+        <div style="margin:0 0 26px;background:var(--sidebar-bg);border:1px solid var(--border);border-left:3px solid var(--cal-note);border-radius:12px;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 15px;border-bottom:1px solid var(--border)">
+            <span style="display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--cal-note)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="opacity:.9"><path d="M4 18l6-6-6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M13 19h7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path></svg>Dry run</span>
+            <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:var(--muted)">walking i, j, k from the back</span>
+          </div>
+          <div style="overflow-x:auto">
+<pre style="margin:0;padding:14px 18px;min-width:max-content;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;line-height:1.7;color:var(--text);white-space:pre"><span style="color:var(--muted)">idx │  i  j  k │ compare     │ write       │ nums1</span>
+<span style="color:var(--muted);opacity:.55">────┼──────────┼─────────────┼─────────────┼──────────────────</span>
+  0 │  2  2  5 │ 3 < 6       │ nums1[5]=6  │ [1 2 3 0 0 6]
+  1 │  2  1  4 │ 3 < 5       │ nums1[4]=5  │ [1 2 3 0 5 6]
+  2 │  2  0  3 │ 3 > 2       │ nums1[3]=3  │ [1 2 3 3 5 6]
+  3 │  1  0  2 │ 2 = 2       │ nums1[2]=2  │ [1 2 2 3 5 6]
+  4 │  1 -1  1 │ j < 0: stop │ <span style="color:var(--muted)">—</span>           │ <span style="color:var(--cal-ok)">[1 2 2 3 5 6] ✓</span></pre>
+          </div>
+        </div>
+
+        <h3 id="complexity" style="margin:38px 0 14px;font-size:20px;line-height:1.4;font-weight:600;letter-spacing:-0.01em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">⭐</span>Complexity &amp; common mistakes</h3>
+        <p style="margin:0 0 20px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Every element is visited once and no extra array is allocated — time <strong style="font-weight:600;color:var(--text)">O(m + n)</strong>, space <strong style="font-weight:600;color:var(--text)">O(1)</strong>. Most bugs come from merging the <em style="font-style:italic">wrong direction</em>:</p>
+        <div style="display:flex;gap:13px;margin:0 0 24px;padding:14px 17px;border-left:3px solid var(--cal-note);border-radius:10px;background:var(--cal-note-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">⚡</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-note);margin:2px 0 5px">Complexity</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">Both read pointers and the write pointer only ever move <em style="font-style:italic">backward</em>, so the loop runs at most <strong style="font-weight:600">m + n</strong> times — no nested scan hides anywhere. Time <strong style="font-weight:600">O(m + n)</strong>, space <strong style="font-weight:600">O(1)</strong>.</p>
+          </div>
+        </div>
+
+        <div style="margin:0 0 26px;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <table style="width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;line-height:1.55;color:var(--text)">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:12px 18px;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--code-bg);width:50%">❌&nbsp;&nbsp;Instead of this</th>
+                <th style="text-align:left;padding:12px 18px;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--code-bg);width:50%;border-left:1px solid var(--border)">✅&nbsp;&nbsp;Do this</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border)">Allocate a third array, merge, then copy back</td>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border);border-left:1px solid var(--border)">Merge <strong style="font-weight:600;color:var(--text)">in place</strong>, writing from the back</td>
+              </tr>
+              <tr style="background:var(--hover-bg)">
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border)">Compare from the front (index <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">0</code>)</td>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border);border-left:1px solid var(--border)">Compare from the end (<code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">m-1</code>, <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">n-1</code>)</td>
+              </tr>
+              <tr>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border)">Loop while <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">i &gt;= 0 &amp;&amp; j &gt;= 0</code></td>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border);border-left:1px solid var(--border)">Loop while <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">j &gt;= 0</code> — the rest is sorted</td>
+              </tr>
+              <tr style="background:var(--hover-bg)">
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border)">Treat trailing zeros as real data</td>
+                <td style="padding:13px 18px;vertical-align:top;border-top:1px solid var(--border);border-left:1px solid var(--border)">Treat slots <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.84em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">m … m+n-1</code> as writable space</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;gap:13px;margin:0 0 8px;padding:14px 17px;border-left:3px solid var(--cal-ok);border-radius:10px;background:var(--cal-ok-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">✅</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-ok);margin:2px 0 5px">Why it's optimal</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">You must touch every element at least once just to produce the merged output, so <strong style="font-weight:600">O(m + n)</strong> time is a hard floor — and reusing the trailing space keeps it at <strong style="font-weight:600">O(1)</strong> extra. This solution can't be beaten asymptotically.</p>
+          </div>
+        </div>
+
+        <h2 id="checklist" style="margin:52px 0 16px;font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-0.018em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">📋</span>Review checklist</h2>
+        <p style="margin:0 0 20px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Before marking this one as <em style="font-style:italic">learned</em>:</p>
+        <ul style="margin:0 0 24px;padding:0;list-style:none;display:flex;flex-direction:column;gap:13px">
+          <li style="display:flex;gap:13px;align-items:flex-start;font-size:var(--read-size,17px);line-height:1.6">
+            <span style="flex:none;width:21px;height:21px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:2px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:var(--page-bg)"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+            <span style="flex:1;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--border);text-decoration-thickness:1px;text-wrap:pretty">Trace the three pointers on a small example by hand</span>
+          </li>
+          <li style="display:flex;gap:13px;align-items:flex-start;font-size:var(--read-size,17px);line-height:1.6">
+            <span style="flex:none;width:21px;height:21px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:2px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="color:var(--page-bg)"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+            <span style="flex:1;color:var(--muted);text-decoration:line-through;text-decoration-color:var(--border);text-decoration-thickness:1px;text-wrap:pretty">Handle the edge case where <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">nums1</code> is empty (<code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.86em;background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:2px 6px;font-weight:500">m = 0</code>)</span>
+          </li>
+          <li style="display:flex;gap:13px;align-items:flex-start;font-size:var(--read-size,17px);line-height:1.6">
+            <span style="flex:none;width:21px;height:21px;border-radius:6px;border:1.6px solid var(--border);background:transparent;margin-top:2px"></span>
+            <span style="flex:1;color:var(--text);text-wrap:pretty">Re-implement from scratch without looking at the notes</span>
+          </li>
+          <li style="display:flex;gap:13px;align-items:flex-start;font-size:var(--read-size,17px);line-height:1.6">
+            <span style="flex:none;width:21px;height:21px;border-radius:6px;border:1.6px solid var(--border);background:transparent;margin-top:2px"></span>
+            <span style="flex:1;color:var(--text);text-wrap:pretty">Explain <em style="font-style:italic">out loud</em> why back-to-front avoids a buffer</span>
+          </li>
+        </ul>
+
+        <h2 id="codeblocks" style="margin:52px 0 16px;font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-0.018em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">💻</span>Code block reference</h2>
+        <p style="margin:0 0 22px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">Every snippet renders through one component, so TypeScript, Node, and React all share the same calm highlighting, header bar, copy button, and line gutter. A few samples — note the one emphasized line in each:</p>
+
+        <dc-import name="CodeBlock" label="withRetry.ts" lang="typescript" code="{{ tsCode }}" highlight="{{ tsHl }}" hint-size="100%,420px" style="display:block;margin:0 0 18px"></dc-import>
+        <dc-import name="CodeBlock" label="server.ts" lang="node" code="{{ nodeCode }}" highlight="{{ nodeHl }}" hint-size="100%,380px" style="display:block;margin:0 0 18px"></dc-import>
+        <dc-import name="CodeBlock" label="Counter.tsx" lang="tsx" code="{{ tsxCode }}" highlight="{{ tsxHl }}" hint-size="100%,340px" style="display:block;margin:0 0 30px"></dc-import>
+
+        <h2 id="takeaways" style="margin:52px 0 16px;font-size:26px;line-height:1.3;font-weight:700;letter-spacing:-0.018em;color:var(--text);scroll-margin-top:90px;text-wrap:pretty"><span style="margin-right:.4em">🧠</span>Key takeaways</h2>
+        <p style="margin:0 0 20px;font-size:var(--read-size,17px);line-height:1.75;color:var(--text);text-wrap:pretty">When an array has <em style="font-style:italic">trailing space</em> and you need an in-place merge, <strong style="font-weight:600;color:var(--text)">fill from the back</strong>. The same backward-write trick reappears in:</p>
+        <ul style="margin:0 0 4px;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px">
+          <li style="display:flex;gap:13px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.5;margin-top:11px"></span>
+            <span style="flex:1;text-wrap:pretty">String problems that grow a buffer in place.</span>
+          </li>
+          <li style="display:flex;gap:13px;line-height:1.72;font-size:var(--read-size,17px);color:var(--text)">
+            <span style="flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.5;margin-top:11px"></span>
+            <span style="flex:1;text-wrap:pretty">Any <em style="font-style:italic">“merge two sorted X”</em> variant under tight memory limits — see the <a onClick="{{ noop }}" role="link" tabindex="0" style="color:var(--accent);text-decoration-line:none;text-decoration-color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px;cursor:pointer" style-hover="text-decoration-line:underline">Two Pointers</a> note.</span>
+          </li>
+        </ul>
+
+        <div style="display:flex;gap:13px;margin:30px 0 8px;padding:14px 17px;border-left:3px solid var(--cal-bonus);border-radius:10px;background:var(--cal-bonus-bg)">
+          <span aria-hidden="true" style="font-size:17px;line-height:1.6;flex:none">🌶️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--cal-bonus);margin:2px 0 5px">Bonus</div>
+            <p style="margin:0;font-size:calc(var(--read-size,17px) - 0.5px);line-height:1.7;color:var(--text);text-wrap:pretty">The same back-to-front fill generalizes: to <em style="font-style:italic">merge k sorted arrays</em>, keep the current tails in a max-heap and pop the largest each step — <strong style="font-weight:600">O((m + n) log k)</strong>, still writing in place.</p>
+          </div>
+        </div>
+
+        <nav aria-label="Pagination" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:48px;padding-top:30px;border-top:1px solid var(--border)">
+          <a onClick="{{ noop }}" role="link" tabindex="0" style="display:flex;flex-direction:column;gap:5px;padding:15px 18px;border:1px solid var(--border);border-radius:12px;text-decoration:none;cursor:pointer;background:transparent;transition:background-color .15s ease,border-color .15s ease" style-hover="background:var(--hover-bg);border-color:var(--accent)">
+            <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Previous</span>
+            <span style="font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.01em">Two Pointers</span>
+          </a>
+          <a onClick="{{ noop }}" role="link" tabindex="0" style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;padding:15px 18px;border:1px solid var(--border);border-radius:12px;text-decoration:none;cursor:pointer;background:transparent;text-align:right;transition:background-color .15s ease,border-color .15s ease" style-hover="background:var(--hover-bg);border-color:var(--accent)">
+            <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500">Next<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+            <span style="font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.01em">Prefix Sums</span>
+          </a>
+        </nav>
+
+      </article>
+    </main>
+
+    <sc-if value="{{ hasTocPanel }}" hint-placeholder-val="{{ true }}">
+      <aside data-col="toc" style="width:250px;flex:none;border-left:1px solid var(--border);overflow-y:auto;padding:28px 22px 48px">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:0 0 14px">On this page</div>
+        <sc-if value="{{ hasToc }}" hint-placeholder-val="{{ true }}">
+          <div style="border-left:1px solid var(--border)">
+            <sc-for list="{{ toc }}" as="item" hint-placeholder-count="5">
+              <a onClick="{{ item.onClick }}" role="button" style="{{ item.style }}" style-hover="{{ item.hoverStyle }}">{{ item.text }}</a>
+            </sc-for>
+          </div>
+        </sc-if>
+      </aside>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;defaultTheme&quot;: {&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dark&quot;,&quot;light&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'dark' | 'light'&quot;,&quot;section&quot;:&quot;Theme&quot;},
+  &quot;readingSize&quot;: {&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:17,&quot;min&quot;:16,&quot;max&quot;:19,&quot;step&quot;:0.5,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Reading&quot;},
+  &quot;showToc&quot;: {&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}
+}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.contentRef = React.createRef();
+    this.nav = [
+      { key:'backend', label:'Backend', children:[
+        { key:'nodejs', label:'Node.js', leaves:['Event Loop','Streams','Worker Threads','Clustering'] },
+        { key:'apis', label:'API Design', leaves:['REST','GraphQL','Rate Limiting'] },
+        { key:'auth', label:'Auth & Security', leaves:['JWT','OAuth 2.0','Sessions'] },
+      ]},
+      { key:'database', label:'Database', children:[
+        { key:'postgres', label:'PostgreSQL', leaves:['Indexing','Query Planning','Transactions','VACUUM'] },
+        { key:'redis', label:'Redis', leaves:['Caching Patterns','Persistence'] },
+        { key:'modeling', label:'Data Modeling', leaves:['Normalization','Sharding'] },
+      ]},
+      { key:'sysdesign', label:'System Design', children:[
+        { key:'fundamentals', label:'Fundamentals', leaves:['Scaling','Load Balancing','CAP Theorem'] },
+        { key:'messaging', label:'Messaging', leaves:['Queues','Pub / Sub','Kafka'] },
+      ]},
+      { key:'dsa', label:'DSA', children:[
+        { key:'arrays', label:'Arrays', leaves:['Sliding Window','Two Pointers','Merge Sorted Array','Prefix Sums'] },
+        { key:'trees', label:'Trees', leaves:['Traversals','BST','Tries'] },
+        { key:'graphs', label:'Graphs', leaves:['BFS / DFS','Dijkstra'] },
+      ]},
+    ];
+    this.state = {
+      userTheme: null,
+      activeLeaf: 'dsa/arrays/Merge Sorted Array',
+      open: { backend:true, database:true, sysdesign:true, dsa:true, 'backend/nodejs':true, 'database/postgres':true, 'dsa/arrays':true },
+      toc: [],
+      activeId: null,
+    };
+    this._onScroll = this._onScroll.bind(this);
+  }
+  componentDidMount(){
+    this._buildToc();
+    const c = this.contentRef.current;
+    if(c) c.addEventListener('scroll', this._onScroll, { passive:true });
+  }
+  componentWillUnmount(){
+    const c = this.contentRef.current;
+    if(c) c.removeEventListener('scroll', this._onScroll);
+    if(this._raf) cancelAnimationFrame(this._raf);
+  }
+  _buildToc(){
+    const c = this.contentRef.current; if(!c) return;
+    const hs = Array.from(c.querySelectorAll('h2[id],h3[id]'));
+    const clean = (t) => (t||'').replace(/^[^\p{L}\p{N}]+/u,'').trim();
+    const toc = hs.map(h => ({ id:h.id, text: clean(h.textContent), level: h.tagName==='H3' ? 3 : 2 }));
+    this.setState({ toc, activeId: toc.length ? toc[0].id : null }, () => this._onScroll());
+  }
+  _onScroll(){
+    if(this._raf) return;
+    this._raf = requestAnimationFrame(() => {
+      this._raf = null;
+      const c = this.contentRef.current; if(!c) return;
+      const top0 = c.getBoundingClientRect().top;
+      const hs = Array.from(c.querySelectorAll('h2[id],h3[id]'));
+      if(!hs.length) return;
+      let active = hs[0].id;
+      for(const h of hs){
+        if(h.getBoundingClientRect().top - top0 <= 120) active = h.id; else break;
+      }
+      if(c.scrollTop + c.clientHeight >= c.scrollHeight - 4) active = hs[hs.length-1].id;
+      if(active !== this.state.activeId) this.setState({ activeId: active });
+    });
+  }
+  _theme(){ return this.state.userTheme || this.props.defaultTheme || 'dark'; }
+  toggleTheme(){ const cur = this._theme(); this.setState({ userTheme: cur==='dark' ? 'light' : 'dark' }); }
+  toggleOpen(key){ this.setState(s => ({ open: { ...s.open, [key]: !s.open[key] } })); }
+  selectLeaf(path){ this.setState({ activeLeaf: path }); }
+  scrollToId(id){
+    const c = this.contentRef.current; if(!c) return;
+    const sel = (window.CSS && CSS.escape) ? CSS.escape(id) : id;
+    const h = c.querySelector('#' + sel); if(!h) return;
+    const top0 = c.getBoundingClientRect().top, ht = h.getBoundingClientRect().top;
+    c.scrollTo({ top: c.scrollTop + (ht - top0) - 28, behavior:'smooth' });
+  }
+  codeData(){
+    const J = (a) => a.join('\n');
+    return {
+      mergeCode: J([
+        '// merge from the back so we never overwrite unread values',
+        'function merge(nums1, m, nums2, n) {',
+        '  let i = m - 1, j = n - 1, k = m + n - 1;',
+        '  while (j >= 0) {',
+        '    if (i >= 0 && nums1[i] > nums2[j]) {',
+        '      nums1[k--] = nums1[i--];',
+        '    } else {',
+        '      nums1[k--] = nums2[j--];',
+        '    }',
+        '  }',
+        '}',
+      ]),
+      mergeHl: [5],
+      tsCode: J([
+        'interface RetryOptions {',
+        '  retries: number;',
+        '  delayMs: number;',
+        '}',
+        '',
+        'async function withRetry<T>(',
+        '  task: () => Promise<T>,',
+        '  { retries, delayMs }: RetryOptions,',
+        '): Promise<T> {',
+        '  let lastError: unknown;',
+        '',
+        '  for (let attempt = 0; attempt <= retries; attempt++) {',
+        '    try {',
+        '      return await task();',
+        '    } catch (err) {',
+        '      lastError = err;',
+        '      await sleep(delayMs * attempt);',
+        '    }',
+        '  }',
+        '',
+        '  throw lastError;',
+        '}',
+      ]),
+      tsHl: [14],
+      nodeCode: J([
+        "import express from 'express';",
+        "import { getUserById } from './db';",
+        '',
+        'const app = express();',
+        '',
+        "app.get('/users/:id', async (req, res) => {",
+        '  const user = await getUserById(req.params.id);',
+        '',
+        '  if (!user) {',
+        "    return res.status(404).json({ error: 'Not found' });",
+        '  }',
+        '',
+        '  res.json(user);',
+        '});',
+        '',
+        'app.listen(3000, () => {',
+        "  console.log('listening on http://localhost:3000');",
+        '});',
+      ]),
+      nodeHl: [7],
+      tsxCode: J([
+        "import { useState } from 'react';",
+        '',
+        'type CounterProps = {',
+        '  start?: number;',
+        '  step?: number;',
+        '};',
+        '',
+        'export function Counter({ start = 0, step = 1 }: CounterProps) {',
+        '  const [count, setCount] = useState(start);',
+        '',
+        '  return (',
+        '    <button className="counter" onClick={() => setCount(count + step)}>',
+        '      Count: {count}',
+        '    </button>',
+        '  );',
+        '}',
+      ]),
+      tsxHl: [9],
+    };
+  }
+  renderVals(){
+    const theme = this._theme();
+    const open = this.state.open, activeLeaf = this.state.activeLeaf;
+    const leafBase = { display:'block', padding:'6px 11px', fontSize:'13px', lineHeight:1.4, color:'var(--nav-fg)', textDecoration:'none', cursor:'pointer', borderRadius:'7px' };
+    const nav = this.nav.map(sec => ({
+      label: sec.label,
+      isOpen: !!open[sec.key],
+      rotDeg: open[sec.key] ? 0 : -90,
+      onToggle: () => this.toggleOpen(sec.key),
+      children: sec.children.map(sub => {
+        const sk = sec.key + '/' + sub.key;
+        return {
+          label: sub.label,
+          isOpen: !!open[sk],
+          rotDeg: open[sk] ? 0 : -90,
+          onToggle: () => this.toggleOpen(sk),
+          leaves: sub.leaves.map(lf => {
+            const path = sk + '/' + lf;
+            const active = path === activeLeaf;
+            return {
+              label: lf,
+              active,
+              onClick: () => this.selectLeaf(path),
+              style: active ? { ...leafBase, color:'var(--accent)', background:'var(--accent-soft)', fontWeight:600 } : leafBase,
+              hoverStyle: active ? { background:'var(--accent-soft)' } : { background:'var(--hover-bg)', color:'var(--text)' },
+            };
+          })
+        };
+      })
+    }));
+    const tocBase = (l3) => ({ display:'block', padding: l3 ? '4px 0 4px 30px' : '4px 0 4px 16px', marginLeft:'-1px', borderLeft:'2px solid transparent', fontSize:'12.5px', lineHeight:1.45, color:'var(--muted)', textDecoration:'none', cursor:'pointer' });
+    const toc = this.state.toc.map(it => {
+      const active = it.id === this.state.activeId;
+      const l3 = it.level === 3;
+      return {
+        text: it.text,
+        active,
+        onClick: () => this.scrollToId(it.id),
+        style: active ? { ...tocBase(l3), color:'var(--accent)', borderLeft:'2px solid var(--accent)', fontWeight:500 } : tocBase(l3),
+        hoverStyle: active ? {} : { color:'var(--text)' },
+      };
+    });
+    return {
+      ...this.codeData(),
+      theme,
+      isDark: theme === 'dark',
+      isLight: theme === 'light',
+      contentRef: this.contentRef,
+      toggleTheme: () => this.toggleTheme(),
+      noop: (e) => { if(e && e.preventDefault) e.preventDefault(); },
+      nav,
+      toc,
+      hasToc: toc.length > 0,
+      hasTocPanel: this.props.showToc !== false,
+      readSize: (this.props.readingSize != null ? this.props.readingSize : 17),
+    };
+  }
+}
+</script>
+</body>
+</html>
