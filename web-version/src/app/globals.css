@@ -660,6 +660,15 @@ input::placeholder {
   margin: 0 auto;
   max-width: 100%;
   height: auto;
+  font-size: 15px !important;
+}
+.mermaid-figure .nodeLabel,
+.mermaid-figure .edgeLabel,
+.mermaid-figure .label {
+  font-size: 15px !important;
+}
+.mermaid-figure .edgeLabel {
+  font-size: 13px !important;
 }
 .mermaid-loading {
   margin: 0 0 24px;
