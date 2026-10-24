@@ -25,7 +25,9 @@ export default async function NotePage({
 }: {
   params: Promise<{ slug: string[] }>;
 }) {
-  const { slug } = await params;
+  const { slug: routeSlug } = await params;
+  // Convert encoded folder names to their filesystem names before lookup.
+  const slug = routeSlug.map((segment) => decodeURIComponent(segment));
   const note = getNoteBySlug(slug);
   if (!note) notFound();
 

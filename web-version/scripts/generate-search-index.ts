@@ -5,7 +5,7 @@ import matter from "gray-matter";
 const CONTENT_ROOT = path.resolve(__dirname, "../..");
 const OUT_PATH = path.resolve(__dirname, "../public/search-index.json");
 
-const CONTENT_DIRS = ["backend", "databases", "dsa", "sql", "system-design"];
+const CONTENT_DIRS = ["AI", "backend", "databases", "dsa", "sql", "system-design"];
 
 interface SearchEntry {
   slug: string;

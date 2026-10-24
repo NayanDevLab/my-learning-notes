@@ -5,6 +5,7 @@ import matter from "gray-matter";
 const CONTENT_ROOT = path.resolve(process.cwd(), "..");
 
 const CONTENT_DIRS = [
+  "AI",
   "backend",
   "databases",
   "dsa",
